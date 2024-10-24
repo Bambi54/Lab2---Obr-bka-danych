@@ -38,7 +38,7 @@ jobs:
       - name: Run script from external repository
         run: |
           cd external-repo
-          python generator_danych.py -s 253347
+          python generator_danych.py -s 25347
       
       - name: Install project dependencies
         run: |
