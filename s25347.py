@@ -44,12 +44,13 @@ def get_data_from_google_sheet():
     csv_file_path = 'external-repo/data_student_25347.csv'
     data = pd.read_csv(csv_file_path)
 
-    # Przekonwertuj dane na listę list (Google Sheets API wymaga takiego formatu)
-    data_list = data.values.tolist()
-    sheet.clear()  # Wyczyść istniejące dane w arkuszu
-    sheet.insert_row(data.columns.tolist(), 1)  # Wpisz nagłówki (nazwa kolumn)
+    #Usunięcie NaN
+    data = data.fillna(0.0)
 
-    # Wpisz dane do arkusza (zaczynając od drugiego wiersza, bo pierwszy to nagłówki)
+    data_list = data.values.tolist()
+    sheet.clear()
+    sheet.insert_row(data.columns.tolist(), 1)
+
     for row in data_list:
         sheet.append_row(row)
 
