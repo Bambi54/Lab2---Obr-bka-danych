@@ -1,7 +1,3 @@
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import accuracy_score
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
@@ -19,8 +15,19 @@ def get_data_from_google_sheet():
     csv_file_path = 'external-repo/data_student_25347.csv'
     data = pd.read_csv(csv_file_path)
 
-    #Usunięcie NaN
-    data = data.fillna(0.0)
+    data.dropna(thresh=3.5, inplace=True)
+
+    mean_avg_sal = round(data[data['Średnie Zarobki'] > 0]['Średnie Zarobki'].mean(), 2)
+
+    data['Średnie Zarobki'] = data['Średnie Zarobki'].fillna(mean_avg_sal)
+
+    mean_age = round(data[data['Wiek'] > 0]['Wiek'].mean())
+    data['Wiek'] = data['Wiek'].fillna(mean_age)
+
+    common_travel = data['Cel Podróży'].mode()[0]
+    data['Cel Podróży'] = data['Cel Podróży'].fillna(common_travel)
+
+    data.dropna(inplace=True)
 
     data_list = data.values.tolist()
     sheet.clear()
