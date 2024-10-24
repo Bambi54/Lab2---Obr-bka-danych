@@ -35,7 +35,8 @@ def generate_data():
 
 def get_data_from_google_sheet():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    credentials_info = json.loads(os.getenv("GOOGLE_SHEETS_CREDENTIALS_JSON"))
+    with open('credentials.json', 'r') as f:
+        credentials_info = json.load(f)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_info, scope)
     client = gspread.authorize(creds)
 
