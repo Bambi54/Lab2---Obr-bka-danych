@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+            token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -23,7 +25,9 @@ jobs:
 
       - name: Clone external repository
         run: |
-          git clone https://github.com/PJATK-ASI-2024/Lab2---Obr-bka-danych.git external-repo
+          git clone https://Bambi54:${{ secrets.LAB2_REPO_KEY }}@github.com/PJATK-ASI-2024/Lab2---Obr-bka-danych.git external-repo
+        env:
+          token: ${{ secrets.LAB2_REPO_KEY }}
 
       - name: Install external project dependencies
         run: |
@@ -33,11 +37,11 @@ jobs:
 
       - name: Run script from external repository
         run: |
-          python generator_danych.py
+          cd external-repo
+          python generator_danych.py -s 253347
       
-      - name: Install dependencies
+      - name: Install project dependencies
         run: |
-          cd ..
           pip install -r requirements.txt
 
       - name: Fetch data from Google Sheet
