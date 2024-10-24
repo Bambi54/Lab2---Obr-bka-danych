@@ -39,8 +39,9 @@ def get_data_from_google_sheet():
         credentials_info = json.load(f)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_info, scope)
     client = gspread.authorize(creds)
-
-    pass
+    sheet = client.open("ASI LAB2").sheet1
+    data = sheet.get_all_records()
+    print("Dane z Google Sheets:", data)
 
 # trenowanie prostego modelu regresji logistycznej
 def train_model():
