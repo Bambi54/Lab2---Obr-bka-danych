@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import accuracy_score
 import gspread
-import os
+import pandas
 from oauth2client.service_account import ServiceAccountCredentials
 import json
 
@@ -40,8 +40,18 @@ def get_data_from_google_sheet():
     creds = ServiceAccountCredentials.from_json_keyfile_dict(credentials_info, scope)
     client = gspread.authorize(creds)
     sheet = client.open("ASI LAB2").sheet1
-    data = sheet.get_all_records()
-    print("Dane z Google Sheets:", data)
+
+    csv_file_path = 'external-repo/data_student_25347.csv'
+    data = pd.read_csv(csv_file_path)
+
+    # Przekonwertuj dane na listę list (Google Sheets API wymaga takiego formatu)
+    data_list = data.values.tolist()
+    sheet.clear()  # Wyczyść istniejące dane w arkuszu
+    sheet.insert_row(data.columns.tolist(), 1)  # Wpisz nagłówki (nazwa kolumn)
+
+    # Wpisz dane do arkusza (zaczynając od drugiego wiersza, bo pierwszy to nagłówki)
+    for row in data_list:
+        sheet.append_row(row)
 
 # trenowanie prostego modelu regresji logistycznej
 def train_model():
