@@ -5,7 +5,7 @@ from sklearn.metrics import accuracy_score
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
-import json
+import json, time
 
 # generowanie prostego zbioru danych
 def generate_data():
@@ -52,7 +52,18 @@ def get_data_from_google_sheet():
     sheet.insert_row(data.columns.tolist(), 1)
 
     for row in data_list:
-        sheet.append_row(row)
+        write_to_sheet_with_retry(sheet, row)
+
+
+def write_to_sheet_with_retry(sheet, row):
+    retries = 5
+    for i in range(retries):
+        try:
+            sheet.append_row(row)
+            break
+        except gspread.exceptions.APIError as e:
+            time.sleep(60)
+
 
 # trenowanie prostego modelu regresji logistycznej
 def train_model():
