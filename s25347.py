@@ -1,7 +1,7 @@
 import gspread
 import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
-import json, time
+import json, time, logging
 
 
 def get_data_from_google_sheet():

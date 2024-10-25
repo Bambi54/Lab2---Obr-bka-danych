@@ -1,24 +1,14 @@
-# Lab1
+# Projekt Analizy Danych - ASI LAB2
+## Opis Projektu
+Projekt służy do analizy i przetwarzania danych użytkowników. Dane są generowane za pomocą skryptu `generator_danych.py`, a następnie czysczone i zamieszczane w Google Sheet.
 
----
-
-1. Skopiowac plik lokalnie i stworzyć swoje repozytorium z nazwą Lab-1_<twój-numer-studenta> i umieścić prywatne repozytorium w organizacji PJATK-ASI-2024, do repozytorium ma mieć dostęp tylko owner repozytorium.
-   
-2. a) Zmień nazwę pliku `train.py` na `<twój-numer-studenta>.py`.  
-   b) W skrypcie stwórz funkcję, która będzie generowała automatycznie dwa zbiory danych w przestrzeni 2D. Każdy zbiór ma być chmurą zbliżonych punktów, a zbiory powinny być na tyle odległe, aby można było gołym okiem określić ich położenie. Wielkość chmury powinna wynosić od 50 do 100 punktów.  
-   c) Wykorzystując wygenerowane dane, stwórz model w skrypcie, który będzie w stanie przewidywać, do którego zbioru/chmury należy dany punkt.
-
-3. Uzupełnij plik `requirements.txt`.
-
-4. Uzupełnij plik `.github/workflows/ci.yml`, tak aby komenda:
-
-   ```yaml
-   run: cat accuracy.txt
-   ```
-
-   wyświetlała:
-   ```
-   Model trained with accuracy: <wynik-w-procentach>%
-   ```
-
----
+## Funkcjonalności
+1. Wygenerowanie danych:
+   - Dane są generowane poprzez uruchomienie skryptu `generator_danych.py`, znajdującym się [tutaj](https://github.com/PJATK-ASI-2024/Lab2---Obr-bka-danych/blob/main/README.md). Skrypt actions uruchamiany jest automatycznie przy każdym pushu na main.
+2. Przetwarzanie danych:
+   - Rekordy w których ilość brakujących wartości przekracza połowę kolumn są usunięte
+   - Wartości brakujące w kolumnach "Wiek" i "Średnie zarobki" są uzupełniane medianą.
+   - Wartości brakujące w kolumnie "Cel Podróży" są uzupełniane najczęściej występującą wartością.
+   - Ostatecznie, wszystkie pozostałe rekordy z brakującymi wartościami zostają usunięte
+3. Uzupełnienie danych w Arkuszu Google:
+   - Arkusz Google "ASI LAB2" jest całkowicie czyszczony, a następnie dane są uzupełniane. W celu obsługi błędów związanych z limitem odwołań do API, zapytania są pięciokrotnie powtarzane co 60 sekund w przypadku wyjątku.
